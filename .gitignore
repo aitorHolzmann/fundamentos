@@ -1,0 +1,11 @@
+# Entornos virtuales
+amb-*/
+*/amb-*/
+venv/
+.venv/
+
+# Jupyter & Python cache
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
