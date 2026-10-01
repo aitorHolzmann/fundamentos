@@ -1,0 +1,5 @@
+pip install wget // para bajar el archivo -> FROM WGET IMPORT DOWNLOAD
+pip install pandas // para trabajar con los archivos
+pip install seaborn matplotlyb // para graficar
+pip install numpy  
+pip install jupyter
