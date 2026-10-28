@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machete Maestro: Tests de Hipótesis - UNICEN</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    line-height: 1.45;
+    padding: 24px;
+    font-size: 13px;
+  }
+
+  .container {
+    max-width: 1350px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  }
+
+  header {
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .badge-header {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .banner-golden-rule {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: #ffffff;
+    padding: 14px 20px;
+    border-radius: 8px;
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .rule-item {
+    text-align: center;
+  }
+
+  .rule-item strong {
+    display: block;
+    font-size: 14px;
+    color: #38bdf8;
+    margin-bottom: 2px;
+  }
+
+  .rule-item span {
+    font-size: 12px;
+    color: #cbd5e1;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 22px 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+
+  .badge-supuestos { background: #fef3c7; color: #b45309; }
+  .badge-comp { background: #e0f2fe; color: #0369a1; }
+  .badge-k { background: #f3e8ff; color: #6b21a8; }
+  .badge-asoc { background: #dcfce7; color: #15803d; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th {
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: 600;
+    font-size: 11.5px;
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+    font-size: 12px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 3px;
+  }
+
+  .tag-reject {
+    color: #b91c1c;
+    font-weight: 600;
+    background: #fee2e2;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    display: inline-block;
+  }
+
+  .tag-accept {
+    color: #15803d;
+    font-weight: 600;
+    background: #dcfce7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    display: inline-block;
+  }
+
+  .tag-neutral {
+    color: #475569;
+    font-weight: 600;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    display: inline-block;
+  }
+
+  .note-box {
+    font-size: 11.5px;
+    padding: 6px 12px;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    color: #92400e;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 12px;
+  }
+
+  @media print {
+    body {
+      background: #ffffff;
+      padding: 0;
+    }
+    .container {
+      box-shadow: none;
+      padding: 0;
+      max-width: 100%;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div>
+      <h1>Fundamentos del Análisis de Datos — UNICEN</h1>
+      <div class="subtitle">Machete Maestro de Inferencia Estadística y Tests de Hipótesis (TP6 y Exámenes)</div>
+    </div>
+    <div class="badge-header">Cursada 2026</div>
+  </header>
+
+  <div class="banner-golden-rule">
+    <div class="rule-item">
+      <strong>Regla Matemática de Decisión</strong>
+      <span>Si <code>p &lt; 0.05</code> se RECHAZA siempre la Hipótesis Nula (H₀)</span>
+    </div>
+    <div class="rule-item">
+      <strong>En Tests de Supuestos</strong>
+      <span>Buscás <code>p ≥ 0.05</code> para validar Normalidad y Homocedasticidad</span>
+    </div>
+    <div class="rule-item">
+      <strong>En Tests de Comparación</strong>
+      <span>Un <code>p &lt; 0.05</code> demuestra diferencias o efectos significativos</span>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1: SUPUESTOS -->
+  <div class="section-title">
+    <span>1. Tests de Supuestos (Validación previa indispensable)</span>
+    <span class="section-badge badge-supuestos">Objetivo: p ≥ 0.05</span>
+  </div>
+  <div class="note-box">
+    <strong>¡Regla de cátedra!</strong> Si los supuestos fallan (p &lt; 0.05), el test paramétrico arroja conclusiones inválidas. En ese caso se utiliza la alternativa no paramétrica (basada en rangos).
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">Supuesto</th>
+        <th style="width: 22%;">Test y Función Python</th>
+        <th style="width: 20%;">Hipótesis Nula (H₀)</th>
+        <th style="width: 22%;">Si p &lt; 0.05 (Rechazo H₀)</th>
+        <th style="width: 22%;">Si p ≥ 0.05 (No rechazo H₀)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Normalidad</strong></td>
+        <td><strong>Shapiro-Wilk</strong><br><code>stats.shapiro(data)</code></td>
+        <td>Los datos provienen de una distribución normal.</td>
+        <td><span class="tag-reject">NO son normales</span><br>Descartar test t / ANOVA clásico.</td>
+        <td><span class="tag-accept">SÍ son normales</span><br>Se valida el supuesto paramétrico.</td>
+      </tr>
+      <tr>
+        <td><strong>Normalidad</strong><br>(Alternativa general)</td>
+        <td><strong>Kolmogorov-Smirnov</strong><br><code>stats.kstest(data, 'norm')</code></td>
+        <td>Los datos se ajustan a la distribución teórica.</td>
+        <td><span class="tag-reject">NO se ajustan</span><br>Menos potente que Shapiro en N moderado.</td>
+        <td><span class="tag-accept">SÍ se ajustan</span><br>Ajuste aceptable a la normal.</td>
+      </tr>
+      <tr>
+        <td><strong>Homocedasticidad</strong></td>
+        <td><strong>Test de Levene</strong><br><code>stats.levene(g1, g2)</code></td>
+        <td>Varianzas de los grupos son iguales (σ₁² = σ₂²).</td>
+        <td><span class="tag-reject">Heterocedasticidad</span><br>Varianzas estadísticamente distintas.</td>
+        <td><span class="tag-accept">Homocedasticidad</span><br>Varianzas homogéneas entre grupos.</td>
+      </tr>
+      <tr>
+        <td><strong>Homocedasticidad</strong><br>(Solo datos normales)</td>
+        <td><strong>Test de Bartlett</strong><br><code>stats.bartlett(g1, g2)</code></td>
+        <td>Las varianzas de los grupos son iguales.</td>
+        <td><span class="tag-reject">Varianzas distintas</span><br>Muy sensible ante no-normalidad.</td>
+        <td><span class="tag-accept">Varianzas iguales</span><br>Usar solo con normalidad probada.</td>
+      </tr>
+      <tr>
+        <td><strong>Esfericidad</strong><br>(k ≥ 3 dependientes)</td>
+        <td><strong>Test de Mauchly</strong><br><code>pingouin.sphericity(...)</code></td>
+        <td>Varianzas de las diferencias entre pares son iguales.</td>
+        <td><span class="tag-reject">No hay esfericidad</span><br>Aplicar corrección Greenhouse-Geisser.</td>
+        <td><span class="tag-accept">SÍ hay esfericidad</span><br>Se valida para ANOVA Medidas Repetidas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 2: 1 Y 2 MUESTRAS -->
+  <div class="section-title">
+    <span>2. Tests de Comparación: 1 Muestra y 2 Muestras</span>
+    <span class="section-badge badge-comp">Medias / Medianas</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">Diseño Muestral</th>
+        <th style="width: 22%;">Test y Función Python</th>
+        <th style="width: 20%;">Hipótesis Nula (H₀)</th>
+        <th style="width: 22%;">Si p &lt; 0.05 (Rechazo H₀)</th>
+        <th style="width: 22%;">Si p ≥ 0.05 (No rechazo H₀)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1 Muestra</strong><br>(Paramétrico)</td>
+        <td><strong>Test t (1 muestra)</strong><br><code>stats.ttest_1samp(x, popmean=mu0)</code></td>
+        <td>La media poblacional es igual a μ₀ (μ = μ₀).</td>
+        <td><span class="tag-accept">Media ≠ μ₀</span><br>Diferencia estadísticamente significativa.</td>
+        <td><span class="tag-neutral">Media = μ₀</span><br>Compatible con el valor de referencia.</td>
+      </tr>
+      <tr>
+        <td><strong>1 Muestra</strong><br>(No paramétrico)</td>
+        <td><strong>Wilcoxon (1 muestra)</strong><br><code>stats.wilcoxon(x - mu0)</code></td>
+        <td>La mediana poblacional es igual a μ₀.</td>
+        <td><span class="tag-accept">Mediana ≠ μ₀</span><br>Diferencia significativa en la mediana.</td>
+        <td><span class="tag-neutral">Mediana = μ₀</span><br>No se detecta desviación de μ₀.</td>
+      </tr>
+      <tr>
+        <td><strong>2 Muestras Indep.</strong><br>(Paramétrico estándar)</td>
+        <td><strong>Test t de Student</strong><br><code>stats.ttest_ind(g1, g2, equal_var=True)</code></td>
+        <td>Medias iguales (μ₁ = μ₂).</td>
+        <td><span class="tag-accept">Medias distintas (μ₁ ≠ μ₂)</span><br>Exige Normalidad y Homocedasticidad.</td>
+        <td><span class="tag-neutral">Medias similares</span><br>No hay diferencia significativa.</td>
+      </tr>
+      <tr>
+        <td><strong>2 Muestras Indep.</strong><br>(Sin homocedasticidad)</td>
+        <td><strong>Test t de Welch</strong><br><code>stats.ttest_ind(g1, g2, equal_var=False)</code></td>
+        <td>Medias iguales (μ₁ = μ₂).</td>
+        <td><span class="tag-accept">Medias distintas</span><br>Ajusta grados de libertad por varianzas.</td>
+        <td><span class="tag-neutral">Medias similares</span><br>No se rechaza igualdad de medias.</td>
+      </tr>
+      <tr>
+        <td><strong>2 Muestras Indep.</strong><br>(No paramétrico)</td>
+        <td><strong>Mann-Whitney U</strong><br><code>stats.mannwhitneyu(g1, g2)</code></td>
+        <td>Distribuciones iguales (P(X &gt; Y) = 0.5).</td>
+        <td><span class="tag-accept">Distribuciones distintas</span><br>Si tienen igual forma, compara medianas.</td>
+        <td><span class="tag-neutral">Sin diferencias</span><br>No hay dominancia estocástica.</td>
+      </tr>
+      <tr>
+        <td><strong>2 Muestras Apareadas</strong><br>(Paramétrico)</td>
+        <td><strong>Test t Apareado</strong><br><code>stats.ttest_rel(antes, despues)</code></td>
+        <td>Media de diferencias es cero (μ_dif = 0).</td>
+        <td><span class="tag-accept">Efecto significativo</span><br>Cambio medio estadísticamente distinto de 0.</td>
+        <td><span class="tag-neutral">Sin efecto</span><br>El tratamiento no produjo cambio medio.</td>
+      </tr>
+      <tr>
+        <td><strong>2 Muestras Apareadas</strong><br>(No paramétrico)</td>
+        <td><strong>Wilcoxon Apareado</strong><br><code>stats.wilcoxon(antes, despues)</code></td>
+        <td>Mediana de diferencias es cero.</td>
+        <td><span class="tag-accept">Efecto significativo</span><br>Mediana de cambio difiere de 0.</td>
+        <td><span class="tag-neutral">Sin efecto</span><br>No se detecta cambio en medianas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 3: k >= 3 MUESTRAS -->
+  <div class="section-title">
+    <span>3. Tests de Comparación: k ≥ 3 Muestras (Independientes y Dependientes)</span>
+    <span class="section-badge badge-k">Multi-Grupo</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">Diseño Muestral</th>
+        <th style="width: 22%;">Test y Función Python</th>
+        <th style="width: 20%;">Hipótesis Nula (H₀)</th>
+        <th style="width: 22%;">Si p &lt; 0.05 (Rechazo H₀)</th>
+        <th style="width: 22%;">Paso Siguiente (Post-Hoc)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>k ≥ 3 Indep.</strong><br>(Paramétrico)</td>
+        <td><strong>ANOVA 1 vía (One-Way)</strong><br><code>stats.f_oneway(g1, g2, g3)</code></td>
+        <td>Todas las medias son iguales (μ₁ = μ₂ = ... = μ_k).</td>
+        <td><span class="tag-accept">Al menos una media difiere</span></td>
+        <td>Ejecutar <strong>Tukey HSD</strong> para determinar qué pares difieren.</td>
+      </tr>
+      <tr>
+        <td><strong>k ≥ 3 Indep.</strong><br>(No paramétrico)</td>
+        <td><strong>Test de Kruskal-Wallis</strong><br><code>stats.kruskal(g1, g2, g3)</code></td>
+        <td>Todas las distribuciones son iguales.</td>
+        <td><span class="tag-accept">Al menos un grupo difiere</span></td>
+        <td>Ejecutar <strong>Post-hoc de Dunn</strong> con ajuste de Bonferroni.</td>
+      </tr>
+      <tr>
+        <td><strong>k ≥ 3 Dependientes</strong><br>(Medidas Repetidas)</td>
+        <td><strong>ANOVA Medidas Repetidas</strong><br><code>statsmodels: AnovaRM(...)</code></td>
+        <td>Medias en todos los momentos son iguales.</td>
+        <td><span class="tag-accept">Efecto del tiempo / condición</span></td>
+        <td>Contrastes t-apareados post-hoc con ajuste de Bonferroni.</td>
+      </tr>
+      <tr>
+        <td><strong>k ≥ 3 Dependientes</strong><br>(No paramétrico)</td>
+        <td><strong>Test de Friedman</strong><br><code>stats.friedmanchisquare(m1, m2, m3)</code></td>
+        <td>Los rangos en todos los momentos son iguales.</td>
+        <td><span class="tag-accept">Al menos un momento difiere</span></td>
+        <td>Post-hoc <strong>Wilcoxon apareado</strong> con corrección de Bonferroni.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 4: ASOCIACIÓN -->
+  <div class="section-title">
+    <span>4. Tests de Asociación e Independencia</span>
+    <span class="section-badge badge-asoc">Relaciones</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">Tipo de Cruce</th>
+        <th style="width: 22%;">Test y Función Python</th>
+        <th style="width: 20%;">Hipótesis Nula (H₀)</th>
+        <th style="width: 22%;">Si p &lt; 0.05 (Rechazo H₀)</th>
+        <th style="width: 22%;">Regla Crítica de Cátedra</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Cualitativa vs Cualitativa</strong></td>
+        <td><strong>Chi-cuadrado (χ²)</strong><br><code>stats.chi2_contingency(tabla)</code></td>
+        <td>Las variables son independientes.</td>
+        <td><span class="tag-accept">Variables ASOCIADAS</span><br>Existe dependencia estadística.</td>
+        <td>Exige que las frecuencias esperadas sean ≥ 5 en al menos el 80% de las celdas.</td>
+      </tr>
+      <tr>
+        <td><strong>Cuantitativa vs Cuantitativa</strong><br>(Lineal)</td>
+        <td><strong>Correlación de Pearson</strong><br><code>stats.pearsonr(x, y)</code></td>
+        <td>No hay relación lineal (ρ = 0).</td>
+        <td><span class="tag-accept">Correlación lineal sig.</span></td>
+        <td>Scatter con ratio 1:1. <strong>No mide relaciones no lineales</strong> y es sensible a outliers.</td>
+      </tr>
+      <tr>
+        <td><strong>Cuantitativa vs Ordinal</strong><br>(o no lineal)</td>
+        <td><strong>Correlación de Spearman</strong><br><code>stats.spearmanr(x, y)</code></td>
+        <td>No hay relación monótona (ρ_s = 0).</td>
+        <td><span class="tag-accept">Relación monótona sig.</span></td>
+        <td><strong>¡Prohibido Pearson con ordinales!</strong> Spearman compara orden de rangos.</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>

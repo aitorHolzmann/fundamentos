@@ -1,0 +1,45 @@
+
+digraph G {
+    
+    rankdir=TB;
+    nodesep=0.5;
+    ranksep=0.6;
+    dpi=200;
+    fontname="sans-serif";
+    node [fontname="sans-serif", fontsize=11, style="filled,rounded", shape=box, margin="0.2,0.1"];
+    edge [fontname="sans-serif", fontsize=10];
+
+    labelloc="t";
+    label="1 Muestra Cuantitativa (vs. Valor de Referencia μ0)";
+    fontsize=14;
+
+    start [label="1 Muestra Cuantitativa\n(Comparar vs. μ0)", fillcolor="#e9ecef", color="#ced4da", shape=box, style="filled,bold,rounded"];
+    norm [label="¿La muestra es Normal?\nShapiro-Wilk (p ≥ 0.05)\ny Q-Q Plot lineal", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+
+    t1 [label="Test t de Student (1 muestra)\nscipy.stats.ttest_1samp(data, popmean=mu0)", fillcolor="#d0ebff", color="#1c7ed6"];
+    pt1 [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rt1 [label="p < 0.05: Rechazo H0\nMedia poblacional difiere de μ0", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrt1 [label="p ≥ 0.05: No rechazo H0\nMedia compatible con μ0", fillcolor="#f1f3f5", color="#868e96"];
+
+    sim [label="¿Distribución simétrica\nrespecto a la mediana?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    w1 [label="Test de Wilcoxon (1 muestra)\nscipy.stats.wilcoxon(data - mu0)", fillcolor="#f3d9fa", color="#ae3ec9"];
+    pw1 [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rw1 [label="p < 0.05: Rechazo H0\nMediana difiere de μ0", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrw1 [label="p ≥ 0.05: No rechazo H0\nMediana compatible con μ0", fillcolor="#f1f3f5", color="#868e96"];
+
+    sign [label="Test de los Signos\n(distribución muy asimétrica)", fillcolor="#ffe3e3", color="#e03131"];
+
+    start -> norm;
+    norm -> t1 [label=" SÍ "];
+    t1 -> pt1;
+    pt1 -> rt1 [label=" p < 0.05 "];
+    pt1 -> nrt1 [label=" p ≥ 0.05 "];
+
+    norm -> sim [label=" NO "];
+    sim -> w1 [label=" SÍ "];
+    w1 -> pw1;
+    pw1 -> rw1 [label=" p < 0.05 "];
+    pw1 -> nrw1 [label=" p ≥ 0.05 "];
+
+    sim -> sign [label=" NO "];
+}

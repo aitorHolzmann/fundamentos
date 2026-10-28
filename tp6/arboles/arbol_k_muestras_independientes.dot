@@ -1,0 +1,39 @@
+
+digraph G {
+    
+    rankdir=TB;
+    nodesep=0.5;
+    ranksep=0.6;
+    dpi=200;
+    fontname="sans-serif";
+    node [fontname="sans-serif", fontsize=11, style="filled,rounded", shape=box, margin="0.2,0.1"];
+    edge [fontname="sans-serif", fontsize=10];
+
+    labelloc="t";
+    label="k ≥ 3 Muestras Independientes (ej. 3 especies de Iris)";
+    fontsize=14;
+
+    start [label="k ≥ 3 Muestras Independientes\n(Comparación de 3 o más grupos)", fillcolor="#e9ecef", color="#ced4da", shape=box, style="filled,bold,rounded"];
+    sup [label="¿Residuos Normales Y\nHomocedasticidad (Levene p ≥ 0.05)?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+
+    anova [label="ANOVA de 1 factor (One-Way)\nscipy.stats.f_oneway(g1, g2, g3, ...)", fillcolor="#d0ebff", color="#1c7ed6"];
+    panova [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    ranova [label="p < 0.05: Rechazo H0\nAl menos un grupo difiere en media\n(Correr Post-hoc Tukey HSD)", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nranova [label="p ≥ 0.05: No rechazo H0\nTodas las medias son similares", fillcolor="#f1f3f5", color="#868e96"];
+
+    kw [label="Test de Kruskal-Wallis\nscipy.stats.kruskal(g1, g2, g3, ...)", fillcolor="#f3d9fa", color="#ae3ec9"];
+    pkw [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rkw [label="p < 0.05: Rechazo H0\nAl menos un grupo tiene distribución distinta\n(Correr Post-hoc Dunn)", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrkw [label="p ≥ 0.05: No rechazo H0\nNo hay diferencias significativas", fillcolor="#f1f3f5", color="#868e96"];
+
+    start -> sup;
+    sup -> anova [label=" SÍ (ambos) "];
+    anova -> panova;
+    panova -> ranova [label=" p < 0.05 "];
+    panova -> nranova [label=" p ≥ 0.05 "];
+
+    sup -> kw [label=" NO (falla alguno) "];
+    kw -> pkw;
+    pkw -> rkw [label=" p < 0.05 "];
+    pkw -> nrkw [label=" p ≥ 0.05 "];
+}

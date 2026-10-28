@@ -1,0 +1,53 @@
+
+digraph G {
+    
+    rankdir=TB;
+    nodesep=0.5;
+    ranksep=0.6;
+    dpi=200;
+    fontname="sans-serif";
+    node [fontname="sans-serif", fontsize=11, style="filled,rounded", shape=box, margin="0.2,0.1"];
+    edge [fontname="sans-serif", fontsize=10];
+
+    labelloc="t";
+    label="2 Muestras Independientes (Grupo A vs. Grupo B)";
+    fontsize=14;
+
+    start [label="2 Muestras Independientes\n(Variable cuantitativa)", fillcolor="#e9ecef", color="#ced4da", shape=box, style="filled,bold,rounded"];
+    norm [label="¿Ambos grupos son Normales?\nShapiro-Wilk en G1 y G2 (p ≥ 0.05)", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+
+    hom1 [label="¿Hay Homocedasticidad?\nTest de Levene (p ≥ 0.05)", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    tstud [label="Test t de Student estándar\nscipy.stats.ttest_ind(g1, g2, equal_var=True)", fillcolor="#d0ebff", color="#1c7ed6"];
+    twelch [label="Test t de Welch (varianzas desiguales)\nscipy.stats.ttest_ind(g1, g2, equal_var=False)", fillcolor="#d0ebff", color="#1c7ed6"];
+
+    hom2 [label="¿Hay Homocedasticidad?\nTest de Levene (p ≥ 0.05)", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    mw [label="Mann-Whitney U\nscipy.stats.mannwhitneyu(g1, g2)\n(Misma dispersión: compara medianas)", fillcolor="#f3d9fa", color="#ae3ec9"];
+    kw [label="Kruskal-Wallis\nscipy.stats.kruskal(g1, g2)\n(Colab: cuando fallan ambos supuestos)", fillcolor="#f3d9fa", color="#ae3ec9"];
+
+    pt [label="¿p-valor test t?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rt [label="p < 0.05: Rechazo H0\nMedias significativamente distintas", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrt [label="p ≥ 0.05: No rechazo H0\nNo hay evidencia de diferencia de medias", fillcolor="#f1f3f5", color="#868e96"];
+
+    pmw [label="¿p-valor no paramétrico?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rmw [label="p < 0.05: Rechazo H0\nMedianas / distribuciones significativamente distintas", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrmw [label="p ≥ 0.05: No rechazo H0\nNo hay evidencia de diferencias", fillcolor="#f1f3f5", color="#868e96"];
+
+    start -> norm;
+    norm -> hom1 [label=" SÍ "];
+    hom1 -> tstud [label=" SÍ "];
+    hom1 -> twelch [label=" NO "];
+
+    tstud -> pt;
+    twelch -> pt;
+    pt -> rt [label=" p < 0.05 "];
+    pt -> nrt [label=" p ≥ 0.05 "];
+
+    norm -> hom2 [label=" NO "];
+    hom2 -> mw [label=" SÍ "];
+    hom2 -> kw [label=" NO "];
+
+    mw -> pmw;
+    kw -> pmw;
+    pmw -> rmw [label=" p < 0.05 "];
+    pmw -> nrmw [label=" p ≥ 0.05 "];
+}

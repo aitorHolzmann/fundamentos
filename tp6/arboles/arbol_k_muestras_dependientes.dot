@@ -1,0 +1,39 @@
+
+digraph G {
+    
+    rankdir=TB;
+    nodesep=0.5;
+    ranksep=0.6;
+    dpi=200;
+    fontname="sans-serif";
+    node [fontname="sans-serif", fontsize=11, style="filled,rounded", shape=box, margin="0.2,0.1"];
+    edge [fontname="sans-serif", fontsize=10];
+
+    labelloc="t";
+    label="k ≥ 3 Muestras Dependientes (Medidas Repetidas: t0, t1, t2...)";
+    fontsize=14;
+
+    start [label="k ≥ 3 Muestras Dependientes\n(Mismos sujetos en 3+ momentos)", fillcolor="#e9ecef", color="#ced4da", shape=box, style="filled,bold,rounded"];
+    sup [label="¿Residuos Normales Y\nEsfericidad (Mauchly p ≥ 0.05)?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+
+    rmanova [label="ANOVA de Medidas Repetidas\nstatsmodels: AnovaRM(...)", fillcolor="#d0ebff", color="#1c7ed6"];
+    prm [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rrm [label="p < 0.05: Rechazo H0\nEl tratamiento/tiempo tuvo efecto significativo\n(Post-hoc: t-apareado con Bonferroni)", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrrm [label="p ≥ 0.05: No rechazo H0\nNo hay efecto significativo", fillcolor="#f1f3f5", color="#868e96"];
+
+    fried [label="Test de Friedman\nscipy.stats.friedmanchisquare(m1, m2, m3)", fillcolor="#f3d9fa", color="#ae3ec9"];
+    pfried [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rfried [label="p < 0.05: Rechazo H0\nAl menos una medición difiere significativamente\n(Post-hoc: Wilcoxon con Bonferroni)", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrfried [label="p ≥ 0.05: No rechazo H0\nNo hay diferencias significativas", fillcolor="#f1f3f5", color="#868e96"];
+
+    start -> sup;
+    sup -> rmanova [label=" SÍ (ambos) "];
+    rmanova -> prm;
+    prm -> rrm [label=" p < 0.05 "];
+    prm -> nrrm [label=" p ≥ 0.05 "];
+
+    sup -> fried [label=" NO (falla alguno) "];
+    fried -> pfried;
+    pfried -> rfried [label=" p < 0.05 "];
+    pfried -> nrfried [label=" p ≥ 0.05 "];
+}

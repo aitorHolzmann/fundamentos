@@ -1,0 +1,42 @@
+
+digraph G {
+    
+    rankdir=TB;
+    nodesep=0.5;
+    ranksep=0.6;
+    dpi=200;
+    fontname="sans-serif";
+    node [fontname="sans-serif", fontsize=11, style="filled,rounded", shape=box, margin="0.2,0.1"];
+    edge [fontname="sans-serif", fontsize=10];
+
+    labelloc="t";
+    label="2 Muestras Relacionadas / Apareadas (Antes vs. Después)";
+    fontsize=14;
+
+    start [label="2 Muestras Apareadas\ndif = despues - antes", fillcolor="#e9ecef", color="#ced4da", shape=box, style="filled,bold,rounded"];
+    note [label="¡Ojo de examen!\nNormalidad se testea sobre DIFERENCIAS\nNo requiere homocedasticidad", fillcolor="#ffe8cc", color="#fd7e14", shape=note];
+
+    norm [label="¿Las diferencias (dif) son Normales?\nShapiro-Wilk: shapiro(dif) (p ≥ 0.05)", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+
+    trel [label="Test t de Student Apareado\nscipy.stats.ttest_rel(antes, despues)", fillcolor="#d0ebff", color="#1c7ed6"];
+    ptrel [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rtrel [label="p < 0.05: Rechazo H0\nEl cambio promedio es significativo (media ≠ 0)", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrtrel [label="p ≥ 0.05: No rechazo H0\nNo hay evidencia de efecto del tratamiento", fillcolor="#f1f3f5", color="#868e96"];
+
+    wrel [label="Test de Wilcoxon Apareado\nscipy.stats.wilcoxon(antes, despues)", fillcolor="#f3d9fa", color="#ae3ec9"];
+    pwrel [label="¿p-valor?", fillcolor="#fff3cd", color="#f59f00", shape=diamond, style="filled"];
+    rwrel [label="p < 0.05: Rechazo H0\nLa mediana de las diferencias difiere de 0", fillcolor="#d3f9d8", color="#2b8a3e"];
+    nrwrel [label="p ≥ 0.05: No rechazo H0\nNo hay evidencia de cambio en la mediana", fillcolor="#f1f3f5", color="#868e96"];
+
+    start -> note [style=dotted];
+    start -> norm;
+    norm -> trel [label=" SÍ "];
+    trel -> ptrel;
+    ptrel -> rtrel [label=" p < 0.05 "];
+    ptrel -> nrtrel [label=" p ≥ 0.05 "];
+
+    norm -> wrel [label=" NO "];
+    wrel -> pwrel;
+    pwrel -> rwrel [label=" p < 0.05 "];
+    pwrel -> nrwrel [label=" p ≥ 0.05 "];
+}
